@@ -29,6 +29,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/loginButton"
             android:text="@string/button_login"/>
 
         <TextView
@@ -68,6 +69,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/signUpButton"
             android:text="@string/button_signup"/>
     </LinearLayout>
 
