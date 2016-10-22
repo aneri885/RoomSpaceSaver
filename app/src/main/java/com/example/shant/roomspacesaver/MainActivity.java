@@ -8,16 +8,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.database.sqlite.*;
+import android.widget.Toast;
 
 
 import java.lang.reflect.Array;
 
 public class MainActivity extends AppCompatActivity {
-
+    DBHelper myDb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d("this",this.toString());
+        myDb = new DBHelper(this);
     }
     public void showSignUpView(View view){
         Log.d("New user!","Signup");
@@ -42,6 +45,11 @@ public class MainActivity extends AppCompatActivity {
                 newUser.userName = userName;
                 newUser.password = userPass;
                 newUser.rooms= new Room[0];
+                boolean inserted = myDb.insertUser(userName, userPass, "[]");
+                if (inserted)
+                    Toast.makeText(MainActivity.this, "User created", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(MainActivity.this, "User creation failed", Toast.LENGTH_SHORT).show();
             }
         });
 
