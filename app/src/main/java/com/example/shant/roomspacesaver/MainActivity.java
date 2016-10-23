@@ -24,8 +24,8 @@ public class MainActivity extends AppCompatActivity {
     }
     public void showSignUpView(View view){
         Log.d("New user!","Signup");
-        LinearLayout loginlayout= (LinearLayout) findViewById(R.id.loginView);
-        LinearLayout signUpLayout = (LinearLayout) findViewById(R.id.signUpView);
+        final LinearLayout loginlayout= (LinearLayout) findViewById(R.id.loginView);
+        final LinearLayout signUpLayout = (LinearLayout) findViewById(R.id.signUpView);
         final EditText newUserName = (EditText) findViewById(R.id.newUserNameText);
         final EditText newUserPass = (EditText) findViewById(R.id.newUserPasswordText);
         Button signUpButton = (Button) findViewById(R.id.signUpButton);
@@ -46,10 +46,14 @@ public class MainActivity extends AppCompatActivity {
                 newUser.password = userPass;
                 newUser.rooms= new Room[0];
                 boolean inserted = myDb.insertUser(userName, userPass, "[]");
-                if (inserted)
-                    Toast.makeText(MainActivity.this, "User created", Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(MainActivity.this, "User creation failed", Toast.LENGTH_SHORT).show();
+                if (inserted){
+                    Toast.makeText(MainActivity.this, "User created, Please login", Toast.LENGTH_SHORT).show();
+                    loginlayout.setVisibility(View.VISIBLE);
+                    signUpLayout.setVisibility(View.INVISIBLE);
+                }
+                else{
+                    Toast.makeText(MainActivity.this, "User creation failed, retry again", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
