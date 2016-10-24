@@ -1,5 +1,6 @@
 package com.example.shant.roomspacesaver;
 
+//import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,19 +16,32 @@ import java.lang.reflect.Array;
 
 public class MainActivity extends AppCompatActivity {
     DBHelper myDb;
+//    Button viewUsersButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d("this",this.toString());
         myDb = new DBHelper(this);
+//        viewUsersButton = (Button)findViewById(R.id.viewUsers);
     }
+
+//    public void viewAllUsers(){
+//        viewUsersButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d("View Users:","Button clicked");
+//                Cursor result = myDb.getUsers();
+//                Log.d("Number of users: ",result.toString());
+//            }
+//        });
+//    }
     public void showSignUpView(View view){
-        Log.d("New user!","Signup");
         final LinearLayout loginlayout= (LinearLayout) findViewById(R.id.loginView);
         final LinearLayout signUpLayout = (LinearLayout) findViewById(R.id.signUpView);
         final EditText newUserName = (EditText) findViewById(R.id.newUserNameText);
         final EditText newUserPass = (EditText) findViewById(R.id.newUserPasswordText);
+        Log.d("New user!","Signup");
         Button signUpButton = (Button) findViewById(R.id.signUpButton);
         loginlayout.setVisibility(View.INVISIBLE);
         signUpLayout.setVisibility(View.VISIBLE);

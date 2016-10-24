@@ -32,6 +32,12 @@
             android:id="@+id/loginButton"
             android:text="@string/button_login"/>
 
+        <!--<Button-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/viewUsers"-->
+            <!--android:text="@string/view_users"/>-->
+
         <TextView
             android:text="New User?"
             android:layout_width="match_parent"
