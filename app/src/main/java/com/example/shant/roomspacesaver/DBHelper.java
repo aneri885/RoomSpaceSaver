@@ -3,8 +3,10 @@ package com.example.shant.roomspacesaver;
 import android.content.ContentValues;
 import android.content.Context;
 //import android.database.Cursor;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by shant on 22-10-2016.
@@ -52,4 +54,10 @@ public class DBHelper extends SQLiteOpenHelper{
 //        Cursor result = myDb.rawQuery("select * from " + TABLE_NAME, null);
 //        return result;
 //    }
+
+    public Cursor checkCredentials(){
+        SQLiteDatabase myDb = this.getWritableDatabase();
+        Cursor result = myDb.rawQuery("select * from users",null);
+        return result;
+    }
 }
