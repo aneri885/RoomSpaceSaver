@@ -27,7 +27,10 @@ public class MainActivity extends AppCompatActivity {
         Log.d("this",this.toString());
         myDb = new DBHelper(this);
         Cursor result = myDb.checkCredentials();
-        Log.d("check cred: ", String.valueOf(result.getCount()));
+        Log.d("result count: ", String.valueOf(result.getCount()));
+        Log.d("column names: ", result.getColumnName(3));
+        Log.d("column count: ", String.valueOf(result.getColumnCount()));
+
         StringBuffer buffer = new StringBuffer();
         while(result.moveToNext()){
             buffer.append("Id: "+result.getString(0)+"\n");

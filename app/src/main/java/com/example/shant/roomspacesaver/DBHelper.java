@@ -57,7 +57,7 @@ public class DBHelper extends SQLiteOpenHelper{
 
     public Cursor checkCredentials(){
         SQLiteDatabase myDb = this.getWritableDatabase();
-        Cursor result = myDb.rawQuery("select * from users",null);
+        Cursor result = myDb.rawQuery("select * from users where username=? and password=?",new String[]{"alice","alice"});//in java single quotes can take only once charater
         return result;
     }
 }
