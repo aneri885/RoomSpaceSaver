@@ -26,19 +26,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.d("this",this.toString());
         myDb = new DBHelper(this);
-        Cursor result = myDb.checkCredentials();
-        Log.d("result count: ", String.valueOf(result.getCount()));
-        Log.d("column names: ", result.getColumnName(3));
-        Log.d("column count: ", String.valueOf(result.getColumnCount()));
+//        Cursor result = myDb.checkCredentials();
+//        Log.d("result count: ", String.valueOf(result.getCount()));
+//        Log.d("column names: ", result.getColumnName(3));
+//        Log.d("column count: ", String.valueOf(result.getColumnCount()));
+//
+//        StringBuffer buffer = new StringBuffer();
+//        while(result.moveToNext()){
+//            buffer.append("Id: "+result.getString(0)+"\n");
+//            buffer.append("Username: "+result.getString(1)+"\n");
+//            buffer.append("Password: "+result.getString(2)+"\n");
+//            buffer.append("Rooms: "+result.getString(3)+"\n");
+//        }
+//        Log.d("Result: ", buffer.toString());
 
-        StringBuffer buffer = new StringBuffer();
-        while(result.moveToNext()){
-            buffer.append("Id: "+result.getString(0)+"\n");
-            buffer.append("Username: "+result.getString(1)+"\n");
-            buffer.append("Password: "+result.getString(2)+"\n");
-            buffer.append("Rooms: "+result.getString(3)+"\n");
-        }
-        Log.d("Result: ", buffer.toString());
 //        viewUsersButton = (Button)findViewById(R.id.viewUsers);
     }
 
@@ -63,9 +64,25 @@ public class MainActivity extends AppCompatActivity {
                 String username = UserName.getText().toString();
                 String password = UserPass.getText().toString();
                 Log.d(username,password);
+                boolean result = myDb.checkCredentials(username, password);
+                if (result){
+                    Log.d("Logged in:", "successfully");
+                }else{
+                    Log.d("Invalid username ","and password");
+                }
             }
         });
         Log.d("Login outside"," Clicked");
+//        String username = UserName.getText().toString();
+//        String password = UserPass.getText().toString();
+//        Log.d(username,password);
+//        boolean result = myDb.checkCredentials(username, password);
+//        if (result){
+//            Log.d("Logged in:", "successfully");
+//        }else{
+//            Log.d("Invalid username ","and password");
+//        }
+
 //        Intent intent = new Intent(this, RoomsActivity.class);
 //        EditText editText = (EditText) findViewById(R.id.loggedIn_message);
 //        String message = editText.getText().toString();

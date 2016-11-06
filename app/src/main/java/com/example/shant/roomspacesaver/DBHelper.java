@@ -55,9 +55,31 @@ public class DBHelper extends SQLiteOpenHelper{
 //        return result;
 //    }
 
-    public Cursor checkCredentials(){
+    public boolean checkCredentials(String username,String password){
+        Log.d("Inside ","checkCredentials");
         SQLiteDatabase myDb = this.getWritableDatabase();
-        Cursor result = myDb.rawQuery("select * from users where username=? and password=?",new String[]{"alice","alice"});//in java single quotes can take only once charater
-        return result;
+        Cursor result = myDb.rawQuery("select username,password from users where username=? and password=?",new String[]{username,password});//in java single quotes can take only once charater
+        Log.d("result count: ", String.valueOf(result.getCount()));
+        Log.d("column count: ", String.valueOf(result.getColumnCount()));
+        String tempUsername="";
+        String tempPassword="";
+
+        while (result.moveToNext()){
+            tempUsername = result.getString(0);
+            tempPassword = result.getString(1);
+//        Log.d("password: ", result.getString(1));
+        }
+        Log.d(tempUsername,tempPassword);
+        Log.d(username,password);
+        Log.d("",""+(result.getCount() ==1));
+//        Log.d(tempUsername.getClass().getName(),username.getClass().getName()+(tempUsername.equals(username)));
+//        Log.d(tempPassword.getClass().getName(),password.getClass().getName()+(tempPassword.equals(password)));
+        if (result.getCount() ==1 && tempUsername.equals(username)&& tempPassword.equals(password)){
+//            Log.d("username: ", result.getString(0));
+//            Log.d("password: ", result.getString(1));
+            return true;
+        }else
+            return false;
+
     }
 }
