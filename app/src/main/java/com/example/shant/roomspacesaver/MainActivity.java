@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d("this",this.toString());
+        myDb = new DBHelper(this); //required for reference
     }
 
     public void logUserIn(View view){
@@ -37,19 +38,16 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(username,password);
                 boolean result = myDb.checkCredentials(username, password);
                 if (result){
-                    Log.d("Logged in:", "successfully");
+                    Toast.makeText(MainActivity.this, "Success !", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MainActivity.this, RoomsActivity.class);
+                    intent.putExtra("ROOMS", "User logged in");
+                    startActivity(intent);
                 }else{
-                    Log.d("Invalid username ","and password");
+                    Toast.makeText(MainActivity.this, "Invalid Details, try again !", Toast.LENGTH_SHORT).show();
                 }
             }
         });
         Log.d("Login outside"," Clicked");
-
-//        Intent intent = new Intent(this, RoomsActivity.class);
-//        EditText editText = (EditText) findViewById(R.id.loggedIn_message);
-//        String message = editText.getText().toString();
-//        intent.putExtra("ROOMS", "User logged in");
-//        startActivity(intent);
     }
     public void showSignUpView(View view){
         final LinearLayout loginlayout= (LinearLayout) findViewById(R.id.loginView);
@@ -57,5 +55,33 @@ public class MainActivity extends AppCompatActivity {
         final EditText newUserName = (EditText) findViewById(R.id.newUserNameText);
         final EditText newUserPass = (EditText) findViewById(R.id.newUserPasswordText);
         Log.d("New user!","Signup");
+//        Button signUpButton = (Button) findViewById(R.id.signUpButton);
+//        loginlayout.setVisibility(View.INVISIBLE);
+//        signUpLayout.setVisibility(View.VISIBLE);
+        //User newUser = new User();
+//        signUpButton.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                // Perform action on click
+//                String userName = newUserName.getText().toString();
+//                String userPass = newUserPass.getText().toString();
+//                Log.d("Username", userName);//if both are blank, logs dont work
+//                Log.d("Password",userPass);//if both are blank, logs dont work
+//                Log.d("Signup Button","Clicked");
+//                //create new user
+//                User newUser = new User();
+//                newUser.userName = userName;
+//                newUser.password = userPass;
+//                newUser.rooms= new Room[0];
+//                boolean inserted = myDb.insertUser(userName, userPass, "[]");
+//                if (inserted){
+//                    Toast.makeText(MainActivity.this, "User created, Please login", Toast.LENGTH_SHORT).show();
+//                    loginlayout.setVisibility(View.VISIBLE);
+//                    signUpLayout.setVisibility(View.INVISIBLE);
+//                }
+//                else{
+//                    Toast.makeText(MainActivity.this, "User creation failed, retry again", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
     }
 }
