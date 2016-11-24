@@ -26,6 +26,7 @@ public class DBHelper extends SQLiteOpenHelper{
     public final static String PASSWORD = "PASSWORD";
     public final static String ROOM_IDS = "ROOM_IDS";
     //rooms table
+    public final static String ROOM_NAME = "ROOM_NAME";
     public final static String ROOM_LENGTH = "ROOM_LENGTH";
     public final static String ROOM_WIDTH = "ROOM_WIDTH";
     public final static String FURNITURE_IDS = "FURNITURE_IDS";
@@ -38,7 +39,7 @@ public class DBHelper extends SQLiteOpenHelper{
     // contructor to create table
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
-        //SQLiteDatabase db = this.getReadableDatabase();// just used to check if db was created when constructor was called
+        SQLiteDatabase db = this.getReadableDatabase();// just used to check if db was created when constructor was called
     }
 
     @Override
@@ -47,7 +48,7 @@ public class DBHelper extends SQLiteOpenHelper{
         // create all  tables i.e users, rooms, furnitures
         Log.d("hey","there on create");
         db.execSQL("create table " + USERS_TABLE + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, USERNAME TEXT, PASSWORD TEXT, ROOM_IDS TEXT)");//Exposes methods to manage a SQLite database.
-        db.execSQL("create table " + ROOMS_TABLE +  " (ID INTEGER PRIMARY KEY AUTOINCREMENT, ROOM_LENGTH TEXT, ROOM_WIDTH TEXT, FURNITURE_IDS TEXT)");
+        db.execSQL("create table " + ROOMS_TABLE +  " (ID INTEGER PRIMARY KEY AUTOINCREMENT,ROOM_NAME, ROOM_LENGTH TEXT, ROOM_WIDTH TEXT, FURNITURE_IDS TEXT)");
         db.execSQL("create table " + FURNITURES_TABLE + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, FURNITURE_LENGTH TEXT, FURNITURE_WIDTH TEXT, X_POSITION TEXT, Y_POSITION TEXT)");
     }
 
@@ -68,6 +69,17 @@ public class DBHelper extends SQLiteOpenHelper{
         contentValues.put(PASSWORD,password);
         contentValues.put(ROOM_IDS,room_ids);
         long result = db.insert(USERS_TABLE, null, contentValues);
+        return result == -1 ? false : true;
+    }
+
+    public boolean addRoom(String roomName, String roomLength, String roomWidth, String furnitureIds){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ROOM_NAME,roomName);
+        contentValues.put(ROOM_LENGTH,roomLength);
+        contentValues.put(ROOM_WIDTH,roomWidth);
+        contentValues.put(FURNITURE_IDS,furnitureIds);
+        long result = db.insert(ROOMS_TABLE,null,contentValues);
         return result == -1 ? false : true;
     }
 //
