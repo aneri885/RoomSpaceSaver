@@ -16,22 +16,28 @@ import android.widget.EditText;
  * Created by shant on 09-11-2016.
  */
 //https://guides.codepath.com/android/Using-DialogFragment
-
+//http://android-coding.blogspot.com/2012/07/dialogfragment-with-interface-to-pass.html
+    
 public class AddRoomDialogFragment extends DialogFragment {
     private EditText roomName, roomLength, roomWidth;
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         Log.d("on create ","dialog");
-        roomName = new EditText(getActivity());
-        roomLength = new EditText(getActivity());
-        roomWidth = new EditText(getActivity());
-        roomName.setInputType(InputType.TYPE_CLASS_TEXT);
-        roomLength.setInputType(InputType.TYPE_CLASS_NUMBER);
-        roomWidth.setInputType(InputType.TYPE_CLASS_NUMBER);
+//        roomName = new EditText(getActivity());
+//        roomLength = new EditText(getActivity());
+//        roomWidth = new EditText(getActivity());
+//        roomName.setInputType(InputType.TYPE_CLASS_TEXT);
+//        roomLength.setInputType(InputType.TYPE_CLASS_NUMBER);
+//        roomWidth.setInputType(InputType.TYPE_CLASS_NUMBER);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.dialog_add_room, null));
+        View addRoomView = inflater.inflate((R.layout.dialog_add_room),null);
+        roomName = (EditText)addRoomView.findViewById(R.id.room_name);
+        roomLength = (EditText)addRoomView.findViewById(R.id.room_length);
+        roomWidth = (EditText)addRoomView.findViewById(R.id.room_width);
+
+        builder.setView(addRoomView);
         builder.setMessage("Enter Room Details")
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
