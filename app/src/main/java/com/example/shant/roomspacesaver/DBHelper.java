@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.icu.text.StringPrepParseException;
 import android.text.LoginFilter;
 import android.util.Log;
 
@@ -72,15 +73,35 @@ public class DBHelper extends SQLiteOpenHelper{
         return result == -1 ? false : true;
     }
 
-    public boolean addRoom(String roomName, String roomLength, String roomWidth, String furnitureIds){
+    public boolean addRoom(int userId, String roomName, String roomLength, String roomWidth, String furnitureIds){
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(ROOM_NAME,roomName);
         contentValues.put(ROOM_LENGTH,roomLength);
         contentValues.put(ROOM_WIDTH,roomWidth);
         contentValues.put(FURNITURE_IDS,furnitureIds);
-        long result = db.insert(ROOMS_TABLE,null,contentValues);
-        return result == -1 ? false : true;
+        //id of inserted room is returned by db.insert
+        long roomNumber = db.insert(ROOMS_TABLE,null,contentValues);
+        //need to add result to array of rooms of user
+        addRoomToUser(userId,roomNumber);
+        Log.d("Room inserted: ",String.valueOf(roomNumber));
+        return roomNumber == -1 ? false : true;
+    }
+    public void addRoomToUser(int userId,long roomNumber){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor result = db.rawQuery("select room_ids from users where id=?",new String[]{String.valueOf(userId)});//in java single quotes can take only once charater
+        Log.d("result count: ", String.valueOf(result.getCount()));
+        Log.d("column count: ", String.valueOf(result.getColumnCount()));
+        String room_ids="";
+        while (result.moveToNext()){
+            Log.d("ids: ",result.toString());
+            room_ids = result.getString(0);
+        }
+        Log.d("Room ids: ",room_ids);
+        //String[] rooms = room_ids.split("(?!^)");;
+        //rooms =
+        //Log.d("Room ids: ",rooms.toString());
+
     }
 //
 //    public Cursor getUsers(){
@@ -89,24 +110,26 @@ public class DBHelper extends SQLiteOpenHelper{
 //        return result;
 //    }
 
-    public boolean checkCredentials(String username,String password){
+    public String[] checkCredentials(String username,String password){
         Log.d("Inside ","checkCredentials");
         /*was getting an error: unable to open databsse file at line below, solution chmod 777 from terminal (data/data/appname/databases)
          to appData.db and appData.db-journal files, file permission error */
         SQLiteDatabase myDb = this.getWritableDatabase();
         Log.d(username,password);
-        Cursor result = myDb.rawQuery("select username,password from users where username=? and password=?",new String[]{username,password});//in java single quotes can take only once charater
+        Cursor result = myDb.rawQuery("select id,username,password from users where username=? and password=?",new String[]{username,password});//in java single quotes can take only once charater
         Log.d("result count: ", String.valueOf(result.getCount()));
         Log.d("column count: ", String.valueOf(result.getColumnCount()));
+        int tempId=-1;
         String tempUsername="";
         String tempPassword="";
 
         while (result.moveToNext()){
-            tempUsername = result.getString(0);
-            tempPassword = result.getString(1);
+            tempId=result.getInt(0);
+            tempUsername = result.getString(1);
+            tempPassword = result.getString(2);
 //        Log.d("password: ", result.getString(1));
         }
-        Log.d(tempUsername,tempPassword);
+        Log.d(String.valueOf(tempId),tempPassword);
         Log.d(username,password);
         Log.d("",""+(result.getCount() ==1));
 //        Log.d(tempUsername.getClass().getName(),username.getClass().getName()+(tempUsername.equals(username)));
@@ -114,9 +137,10 @@ public class DBHelper extends SQLiteOpenHelper{
         if (result.getCount() ==1 && tempUsername.equals(username)&& tempPassword.equals(password)){
 //            Log.d("username: ", result.getString(0));
 //            Log.d("password: ", result.getString(1));
-            return true;
+            String[] answer=new String[]{String.valueOf(tempId),"true"};
+            return new String[]{String.valueOf(tempId),"true"};
         }else
-            return false;
+            return new String[]{"0","false"};
 
     }
 }

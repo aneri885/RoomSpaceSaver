@@ -17,7 +17,7 @@ import android.widget.EditText;
  */
 //https://guides.codepath.com/android/Using-DialogFragment
 //http://android-coding.blogspot.com/2012/07/dialogfragment-with-interface-to-pass.html
-    
+
 public class AddRoomDialogFragment extends DialogFragment {
     private EditText roomName, roomLength, roomWidth;
     @Override

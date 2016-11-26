@@ -13,9 +13,18 @@ import android.widget.TextView;
 public class RoomsActivity extends AppCompatActivity {
     Button addRoomButton;
     AddRoomDialogFragment addRoomDialogFragment;
+    DBHelper myDb;
+    int userId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle b = getIntent().getExtras();
+        //storing userid for further use in room manipulation
+        userId = Integer.parseInt(b.getString("userId"));
+        Log.d("Bundle - id ",b.getString("userId"));
+        Log.d("Bundle - username ",b.getString("username"));
+        Log.d("Bundle - password ",b.getString("password"));
+        myDb = new DBHelper(this);
         setContentView(R.layout.activity_rooms);
     }
 
@@ -40,7 +49,7 @@ public class RoomsActivity extends AppCompatActivity {
         Log.d("New room name:  ",roomName);
         Log.d("New room length:  ",roomLength);
         Log.d("New room width:  ",roomWidth);
-
+        myDb.addRoom(userId,roomName, roomLength, roomWidth, "[]");
     }
 }
 

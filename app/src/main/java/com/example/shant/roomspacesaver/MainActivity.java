@@ -36,11 +36,15 @@ public class MainActivity extends AppCompatActivity {
                 String username = UserName.getText().toString();
                 String password = UserPass.getText().toString();
                 Log.d(username,password);
-                boolean result = myDb.checkCredentials(username, password);
-                if (result){
+                String[] result = myDb.checkCredentials(username, password);
+                if (result[1]=="true"){
                     Toast.makeText(MainActivity.this, "Success !", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(MainActivity.this, RoomsActivity.class);
-                    intent.putExtra("ROOMS", "User logged in");
+                    Bundle b = new Bundle();
+                    b.putString("userId",result[0]);
+                    b.putString("username",username);
+                    b.putString("password",password);
+                    intent.putExtras(b);
                     startActivity(intent);
                 }else{
                     Toast.makeText(MainActivity.this, "Invalid Details, try again !", Toast.LENGTH_SHORT).show();
