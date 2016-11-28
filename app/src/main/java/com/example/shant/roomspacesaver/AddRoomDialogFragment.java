@@ -62,6 +62,9 @@ public class AddRoomDialogFragment extends DialogFragment {
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User cancelled the dialog
+                        RoomsActivity roomsActivity = (RoomsActivity) getActivity();
+                        roomsActivity.addRoomResult("Room creation cancelled");
+
                     }
                 });
         // Create the AlertDialog object and return it
