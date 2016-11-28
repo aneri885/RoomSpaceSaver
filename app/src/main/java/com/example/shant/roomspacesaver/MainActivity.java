@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 //                newUser.userName = userName;
 //                newUser.password = userPass;
 //                newUser.rooms= new Room[0];
-//                boolean inserted = myDb.insertUser(userName, userPass, "[]");
+//                boolean inserted = myDb.insertUser(userName, userPass, "");
 //                if (inserted){
 //                    Toast.makeText(MainActivity.this, "User created, Please login", Toast.LENGTH_SHORT).show();
 //                    loginlayout.setVisibility(View.VISIBLE);

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class RoomsActivity extends AppCompatActivity {
     Button addRoomButton;
@@ -33,8 +34,6 @@ public class RoomsActivity extends AppCompatActivity {
         addRoomButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final EditText roomName = (EditText) findViewById(R.id.room_name);
-
                 Log.d("add room inside"," Clicked");
                 addRoomDialogFragment =new AddRoomDialogFragment();
                 Log.d(getFragmentManager().toString(),"   dsfsdf");
@@ -42,14 +41,17 @@ public class RoomsActivity extends AppCompatActivity {
             }
         });
         Log.d("add room outside"," Clicked");
-
     }
 
-    public void passNewRoom(String roomName, String roomLength, String roomWidth) {
+    public boolean passNewRoom(String roomName, String roomLength, String roomWidth) {
         Log.d("New room name:  ",roomName);
         Log.d("New room length:  ",roomLength);
         Log.d("New room width:  ",roomWidth);
-        myDb.addRoom(userId,roomName, roomLength, roomWidth, "[]");
+        return myDb.addRoom(userId,roomName, roomLength, roomWidth, "");
+    }
+
+    public void addRoomResult(String toastMsg){
+        Toast.makeText(RoomsActivity.this, toastMsg, Toast.LENGTH_SHORT).show();
     }
 }
 

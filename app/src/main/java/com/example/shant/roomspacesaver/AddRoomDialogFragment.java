@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * Created by shant on 09-11-2016.
@@ -24,12 +25,6 @@ public class AddRoomDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         Log.d("on create ","dialog");
-//        roomName = new EditText(getActivity());
-//        roomLength = new EditText(getActivity());
-//        roomWidth = new EditText(getActivity());
-//        roomName.setInputType(InputType.TYPE_CLASS_TEXT);
-//        roomLength.setInputType(InputType.TYPE_CLASS_NUMBER);
-//        roomWidth.setInputType(InputType.TYPE_CLASS_NUMBER);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View addRoomView = inflater.inflate((R.layout.dialog_add_room),null);
@@ -51,7 +46,16 @@ public class AddRoomDialogFragment extends DialogFragment {
                         Log.d("Room length value: ",newRoomLength);
                         Log.d("Room width value: ",newRoomWidth);
                         RoomsActivity roomsActivity = (RoomsActivity) getActivity();
-                        roomsActivity.passNewRoom(newRoomName, newRoomLength, newRoomWidth);
+                        boolean result = roomsActivity.passNewRoom(newRoomName, newRoomLength, newRoomWidth);
+                        if (result){
+                            roomsActivity.addRoomResult("Room created and updated");
+//                            Toast.makeText(AddRoomDialogFragment.this, "User created, Please login", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            roomsActivity.addRoomResult("Room creation failed");
+//                            Toast.makeText(RoomsActivity.this, "User creation failed, retry again", Toast.LENGTH_SHORT).show();
+                        }
+
 
                     }
                 })
@@ -63,13 +67,4 @@ public class AddRoomDialogFragment extends DialogFragment {
         // Create the AlertDialog object and return it
         return builder.create();
     }
-//    @Override
-//    public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup,Bundle bundle){
-//        //Log.d("ViewGroup",viewGroup.toString());
-//        View v = layoutInflater.inflate(R.layout.dialog_add_room,viewGroup,false);
-//        View tv = v.findViewById(R.id.room_name);
-//        Log.d("Room name:",tv.toString());
-//
-//        return v;
-//    }
 }

@@ -10,6 +10,9 @@ import android.icu.text.StringPrepParseException;
 import android.text.LoginFilter;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * Created by shant on 22-10-2016.
  */
@@ -83,11 +86,11 @@ public class DBHelper extends SQLiteOpenHelper{
         //id of inserted room is returned by db.insert
         long roomNumber = db.insert(ROOMS_TABLE,null,contentValues);
         //need to add result to array of rooms of user
-        addRoomToUser(userId,roomNumber);
+        int result = addRoomToUser(userId,roomNumber);
         Log.d("Room inserted: ",String.valueOf(roomNumber));
         return roomNumber == -1 ? false : true;
     }
-    public void addRoomToUser(int userId,long roomNumber){
+    public int addRoomToUser(int userId,long roomNumber){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor result = db.rawQuery("select room_ids from users where id=?",new String[]{String.valueOf(userId)});//in java single quotes can take only once charater
         Log.d("result count: ", String.valueOf(result.getCount()));
@@ -98,17 +101,20 @@ public class DBHelper extends SQLiteOpenHelper{
             room_ids = result.getString(0);
         }
         Log.d("Room ids: ",room_ids);
-        //String[] rooms = room_ids.split("(?!^)");;
-        //rooms =
-        //Log.d("Room ids: ",rooms.toString());
-
+        String[] rooms = room_ids.split(",");
+        Log.d("Room ids: ",Arrays.toString(rooms));
+        ArrayList<String> roomsList = new ArrayList<>(Arrays.asList(rooms));
+        roomsList.add(roomsList.size(),String.valueOf(roomNumber));
+        Log.d("Room ids: ",roomsList.toString());
+        String test = roomsList.toString();
+        Log.d("Room ids: ",test.substring(1,test.length()-1));
+        test = test.substring(1,test.length()-1);
+        ContentValues contentValues= new ContentValues();
+        contentValues.put(ROOM_IDS,test);
+        int count = db.update(USERS_TABLE,contentValues,ID+"=?",new String[]{String.valueOf(userId)});
+        Log.d("count=",String.valueOf(count));
+        return count;
     }
-//
-//    public Cursor getUsers(){
-//        SQLiteDatabase myDb = this.getWritableDatabase();
-//        Cursor result = myDb.rawQuery("select * from " + USERS_TABLE, null);
-//        return result;
-//    }
 
     public String[] checkCredentials(String username,String password){
         Log.d("Inside ","checkCredentials");
