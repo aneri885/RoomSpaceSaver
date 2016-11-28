@@ -29,29 +29,45 @@ public class MainActivity extends AppCompatActivity {
         final EditText UserName = (EditText) findViewById(R.id.userNameText);
         final EditText UserPass = (EditText) findViewById(R.id.userPasswordText);
         loginButton = (Button)findViewById(R.id.loginButton);
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Login inside"," Clicked");
-                String username = UserName.getText().toString();
-                String password = UserPass.getText().toString();
-                Log.d(username,password);
-                String[] result = myDb.checkCredentials(username, password);
-                if (result[1]=="true"){
-                    Toast.makeText(MainActivity.this, "Success !", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(MainActivity.this, RoomsActivity.class);
-                    Bundle b = new Bundle();
-                    b.putString("userId",result[0]);
-                    b.putString("username",username);
-                    b.putString("password",password);
-                    intent.putExtras(b);
-                    startActivity(intent);
-                }else{
-                    Toast.makeText(MainActivity.this, "Invalid Details, try again !", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+//        loginButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d("Login inside"," Clicked");
+//                String username = UserName.getText().toString();
+//                String password = UserPass.getText().toString();
+//                Log.d(username,password);
+//                String[] result = myDb.checkCredentials(username, password);
+//                if (result[1]=="true"){
+//                    Toast.makeText(MainActivity.this, "Success !", Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent(MainActivity.this, RoomsActivity.class);
+//                    Bundle b = new Bundle();
+//                    b.putString("userId",result[0]);
+//                    b.putString("username",username);
+//                    b.putString("password",password);
+//                    intent.putExtras(b);
+//                    startActivity(intent);
+//                }else{
+//                    Toast.makeText(MainActivity.this, "Invalid Details, try again !", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
         Log.d("Login outside"," Clicked");
+        String username = UserName.getText().toString();
+        String password = UserPass.getText().toString();
+        Log.d(username,password);
+        String[] result = myDb.checkCredentials(username, password);
+        if (result[1]=="true"){
+            Toast.makeText(MainActivity.this, "Success !", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, RoomsActivity.class);
+            Bundle b = new Bundle();
+            b.putString("userId",result[0]);
+            b.putString("username",username);
+            b.putString("password",password);
+            intent.putExtras(b);
+            startActivity(intent);
+        }else{
+            Toast.makeText(MainActivity.this, "Invalid Details, try again !", Toast.LENGTH_SHORT).show();
+        }
     }
     public void showSignUpView(View view){
         final LinearLayout loginlayout= (LinearLayout) findViewById(R.id.loginView);

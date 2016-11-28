@@ -31,16 +31,19 @@ public class RoomsActivity extends AppCompatActivity {
 
     public void addRoom(View view){
         addRoomButton=(Button)findViewById(R.id.addRoomButton);
-        addRoomButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("add room inside"," Clicked");
-                addRoomDialogFragment =new AddRoomDialogFragment();
-                Log.d(getFragmentManager().toString(),"   dsfsdf");
-                addRoomDialogFragment.show(getFragmentManager(),"Show addRoom Dialog fragment");
-            }
-        });
+//        addRoomButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d("add room inside"," Clicked");
+//                addRoomDialogFragment =new AddRoomDialogFragment();
+//                Log.d(getFragmentManager().toString(),"   dsfsdf");
+//                addRoomDialogFragment.show(getFragmentManager(),"Show addRoom Dialog fragment");
+//            }
+//        });
         Log.d("add room outside"," Clicked");
+        addRoomDialogFragment =new AddRoomDialogFragment();
+        Log.d(getFragmentManager().toString(),"   dsfsdf");
+        addRoomDialogFragment.show(getFragmentManager(),"Show addRoom Dialog fragment");
     }
 
     public boolean passNewRoom(String roomName, String roomLength, String roomWidth) {
