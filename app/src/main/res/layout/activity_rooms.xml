@@ -10,6 +10,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.shant.roomspacesaver.RoomsActivity">
 
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rooms_list_view">
+
+    </ListView>
     <Button
         android:text="Add Room"
         android:layout_width="wrap_content"

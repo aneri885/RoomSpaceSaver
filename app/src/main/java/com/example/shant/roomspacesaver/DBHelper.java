@@ -116,6 +116,26 @@ public class DBHelper extends SQLiteOpenHelper{
         return count;
     }
 
+    public ArrayList getRoomsList(String userId){
+        SQLiteDatabase myDb = this.getReadableDatabase();
+        Cursor result = myDb.rawQuery("select room_ids from users where id=?",new String[]{userId});
+        Log.d("result count: ", String.valueOf(result.getCount()));
+        String roomList="";
+        while (result.moveToNext()){
+            Log.d("Room ids for list view:",result.getString(0));
+            roomList = result.getString(0);
+        }
+        roomList = roomList.replaceAll("\\s+","");// remove all spaces from string (why are spaces being inserted?)
+        String[] rooms=roomList.split(",");
+        ArrayList<String> roomsList = new ArrayList<>(Arrays.asList(rooms));
+        return roomsList;
+    }
+
+    public void getRooms(ArrayList<String> rooms){
+        SQLiteDatabase myDb = this.getReadableDatabase();
+//        Cursor result = myDb.rawQuery("select id,room_name,room_length,room_width,furniture_ids from rooms where id=",);
+    }
+
     public String[] checkCredentials(String username,String password){
         Log.d("Inside ","checkCredentials");
         /*was getting an error: unable to open databsse file at line below, solution chmod 777 from terminal (data/data/appname/databases)

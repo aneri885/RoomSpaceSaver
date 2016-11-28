@@ -6,14 +6,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class RoomsActivity extends AppCompatActivity {
     Button addRoomButton;
     AddRoomDialogFragment addRoomDialogFragment;
+    ListView roomsListView ;
     DBHelper myDb;
     int userId;
     @Override
@@ -27,6 +32,17 @@ public class RoomsActivity extends AppCompatActivity {
         Log.d("Bundle - password ",b.getString("password"));
         myDb = new DBHelper(this);
         setContentView(R.layout.activity_rooms);
+        roomsListView = (ListView)findViewById(R.id.rooms_list_view);
+        final ArrayList<String> roomsList = myDb.getRoomsList(b.getString("userId"));
+        Log.d("Rooms count",String.valueOf(roomsList.size()));
+        String[] rooms=new String[roomsList.size()];
+        for(int i = 0; i < roomsList.size(); i++){
+            Log.d("Room details",String.valueOf(roomsList.get(i)));
+            rooms[i]= String.valueOf(roomsList.get(i));
+        }
+        //myDb.getRooms(roomsList);
+        ArrayAdapter adapter=new ArrayAdapter(this,android.R.layout.simple_list_item_1,rooms);
+        roomsListView.setAdapter(adapter);
     }
 
     public void addRoom(View view){
