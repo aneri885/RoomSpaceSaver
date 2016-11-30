@@ -2,18 +2,24 @@ package com.example.shant.roomspacesaver;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class RoomsActivity extends AppCompatActivity {
     Button addRoomButton;
@@ -30,19 +36,49 @@ public class RoomsActivity extends AppCompatActivity {
         Log.d("Bundle - id ",b.getString("userId"));
         Log.d("Bundle - username ",b.getString("username"));
         Log.d("Bundle - password ",b.getString("password"));
+        Log.d("Bundle - rooms ",b.getString("rooms"));
+        String[] test = b.getString("rooms").split(",");
+//        Log.d("Test",String.valueOf(test.length));
+
         myDb = new DBHelper(this);
         setContentView(R.layout.activity_rooms);
         roomsListView = (ListView)findViewById(R.id.rooms_list_view);
-        final ArrayList<String> roomsList = myDb.getRoomsList(b.getString("userId"));
-        Log.d("Rooms count",String.valueOf(roomsList.size()));
-        String[] rooms=new String[roomsList.size()];
-        for(int i = 0; i < roomsList.size(); i++){
-            Log.d("Room details",String.valueOf(roomsList.get(i)));
-            rooms[i]= String.valueOf(roomsList.get(i));
+//        final ArrayList<String> roomsList = myDb.getRoomsList(b.getString("userId"));
+        //.replace("[","").replace("]","")
+        final ArrayList<String> roomsList = new ArrayList<>(Arrays.asList(b.getString("rooms").replaceAll("\\s+","").split(",")));
+//        String[] roomsList=b.getString("rooms").replaceAll("\\s+","").split(",");
+//        Array<String> roomsList = new Array()
+        Log.d("Rooms count",String.valueOf(roomsList));
+        Log.d("Rooms",String.valueOf(roomsList));
+//        for(int i = 0; i < roomsList.size(); i++){
+//            Log.d("Room details",String.valueOf(roomsList.get(i)));
+//        }
+////        ArrayList<Room> roomsData = myDb.getRooms(roomsList);
+        Cursor roomsData = myDb.getRooms(roomsList);
+        while (roomsData.moveToNext()){
+            Log.d(roomsData.getColumnName(0),roomsData.getString(0));
+            Log.d(roomsData.getColumnName(1),roomsData.getString(1));
+            Log.d(roomsData.getColumnName(2),roomsData.getString(2));
         }
-        //myDb.getRooms(roomsList);
-        ArrayAdapter adapter=new ArrayAdapter(this,android.R.layout.simple_list_item_1,rooms);
-        roomsListView.setAdapter(adapter);
+        RoomsListCursorAdapter roomsListCursorAdapter= new RoomsListCursorAdapter(this,roomsData,true);
+
+//        myDb.getRooms(roomsList);
+//        ArrayAdapter adapter=new ArrayAdapter(this,android.R.layout.simple_list_item_1,rooms);
+//        ArrayAdapter adapter=new ArrayAdapter(this,android.R.layout.simple_list_item_1,roomsData);
+
+//        CursorAdapter cursorAdapter=new CursorAdapter(this,roomsData) {
+//            @Override
+//            public View newView(Context context, Cursor cursor, ViewGroup parent) {
+//                return null;
+//            }
+//
+//            @Override
+//            public void bindView(View view, Context context, Cursor cursor) {
+//
+//            }
+//        }
+        roomsListView.setAdapter(roomsListCursorAdapter);// works with arrayList as well as array
+
     }
 
     public void addRoom(View view){

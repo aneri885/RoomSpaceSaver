@@ -24,7 +24,7 @@ public class DBHelper extends SQLiteOpenHelper{
     public final static String ROOMS_TABLE = "rooms";
     public final static String FURNITURES_TABLE = "furniture";
     //common variable id for all tables
-    public final static String ID = "ID";
+    public final static String ID = "_id";
     // users table
     public final static String USERNAME = "USERNAME";
     public final static String PASSWORD = "PASSWORD";
@@ -51,9 +51,9 @@ public class DBHelper extends SQLiteOpenHelper{
         //create table whenever class is called, takes is SQLiteDatabse class
         // create all  tables i.e users, rooms, furnitures
         Log.d("hey","there on create");
-        db.execSQL("create table " + USERS_TABLE + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, USERNAME TEXT, PASSWORD TEXT, ROOM_IDS TEXT)");//Exposes methods to manage a SQLite database.
-        db.execSQL("create table " + ROOMS_TABLE +  " (ID INTEGER PRIMARY KEY AUTOINCREMENT,ROOM_NAME, ROOM_LENGTH TEXT, ROOM_WIDTH TEXT, FURNITURE_IDS TEXT)");
-        db.execSQL("create table " + FURNITURES_TABLE + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, FURNITURE_LENGTH TEXT, FURNITURE_WIDTH TEXT, X_POSITION TEXT, Y_POSITION TEXT)");
+        db.execSQL("create table " + USERS_TABLE + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, USERNAME TEXT, PASSWORD TEXT, ROOM_IDS TEXT)");//Exposes methods to manage a SQLite database.
+        db.execSQL("create table " + ROOMS_TABLE +  " (_id INTEGER PRIMARY KEY AUTOINCREMENT,ROOM_NAME, ROOM_LENGTH TEXT, ROOM_WIDTH TEXT, FURNITURE_IDS TEXT)");
+        db.execSQL("create table " + FURNITURES_TABLE + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, FURNITURE_LENGTH TEXT, FURNITURE_WIDTH TEXT, X_POSITION TEXT, Y_POSITION TEXT)");
     }
 
     @Override
@@ -92,7 +92,7 @@ public class DBHelper extends SQLiteOpenHelper{
     }
     public int addRoomToUser(int userId,long roomNumber){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor result = db.rawQuery("select room_ids from users where id=?",new String[]{String.valueOf(userId)});//in java single quotes can take only once charater
+        Cursor result = db.rawQuery("select room_ids from users where _id=?",new String[]{String.valueOf(userId)});//in java single quotes can take only once charater
         Log.d("result count: ", String.valueOf(result.getCount()));
         Log.d("column count: ", String.valueOf(result.getColumnCount()));
         String room_ids="";
@@ -116,43 +116,74 @@ public class DBHelper extends SQLiteOpenHelper{
         return count;
     }
 
-    public ArrayList getRoomsList(String userId){
-        SQLiteDatabase myDb = this.getReadableDatabase();
-        Cursor result = myDb.rawQuery("select room_ids from users where id=?",new String[]{userId});
-        Log.d("result count: ", String.valueOf(result.getCount()));
-        String roomList="";
-        while (result.moveToNext()){
-            Log.d("Room ids for list view:",result.getString(0));
-            roomList = result.getString(0);
-        }
-        roomList = roomList.replaceAll("\\s+","");// remove all spaces from string (why are spaces being inserted?)
-        String[] rooms=roomList.split(",");
-        ArrayList<String> roomsList = new ArrayList<>(Arrays.asList(rooms));
-        return roomsList;
-    }
+//    public ArrayList getRoomsList(String userId){
+//        SQLiteDatabase myDb = this.getReadableDatabase();
+//        Cursor result = myDb.rawQuery("select room_ids from users where id=?",new String[]{userId});
+//        Log.d("result count: ", String.valueOf(result.getCount()));
+//        String roomList="";
+//        while (result.moveToNext()){
+//            Log.d("Room ids for list view:",result.getString(0));
+//            roomList = result.getString(0);
+//        }
+//        roomList = roomList.replaceAll("\\s+","");// remove all spaces from string (why are spaces being inserted?)
+//        String[] rooms=roomList.split(",");
+//        ArrayList<String> roomsList = new ArrayList<>(Arrays.asList(rooms));
+//        return roomsList;
+//    }
 
-    public void getRooms(ArrayList<String> rooms){
+//    public ArrayList<Room> getRooms(ArrayList<String> rooms){
+//        SQLiteDatabase myDb = this.getReadableDatabase();
+//        String temp = rooms.toString();
+//        temp = temp.substring(1,temp.length()-1);
+//        Log.d("getRooms",temp);
+//        Cursor result = myDb.rawQuery("select id,room_name,room_length,room_width,furniture_ids from rooms where id in ("+temp+")",new String[]{});
+////        Log.d("getRooms",temp.replaceAll("[0-9]+g","?"));
+//        //can also do temp.replaceAll("/[0-9]]","?") for multiple question marks, regex doesn't work
+//        Log.d("result count: ", String.valueOf(result.getCount()));
+//        Log.d("column count: ", String.valueOf(result.getColumnCount()));
+//        Room[] room=new Room[result.getCount()];
+//        ArrayList<Room> roomsData = new ArrayList<Room>();
+//        int i=0;
+//        while (result.moveToNext()){
+//            Log.d("id:",result.getString(0));
+//            Room roomData=new Room();
+//            roomData.roomName = result.getString(0);
+//            roomData.roomLength= result.getString(1);
+//            roomsData.add(i,roomData);
+//            Log.d("room_name:",result.getString(0));
+//            Log.d("room_length:",result.getString(1));
+//            Log.d("room_width:",result.getString(2));
+//            Log.d("furniture_ids:",result.getString(3));
+//            i++;
+//        }
+//        return roomsData;
+//    }
+
+    public Cursor getRooms(ArrayList<String> rooms){
         SQLiteDatabase myDb = this.getReadableDatabase();
-//        Cursor result = myDb.rawQuery("select id,room_name,room_length,room_width,furniture_ids from rooms where id=",);
+        Cursor result = myDb.rawQuery("select * from rooms where _id in ("+rooms.toString().replace("[","").replace("]","")+")",new String[]{});
+        return result;
+
     }
 
     public String[] checkCredentials(String username,String password){
         Log.d("Inside ","checkCredentials");
-        /*was getting an error: unable to open databsse file at line below, solution chmod 777 from terminal (data/data/appname/databases)
+        /*was getting an error: unable to open database file at line below, solution chmod 777 from terminal (data/data/appname/databases)
          to appData.db and appData.db-journal files, file permission error */
         SQLiteDatabase myDb = this.getWritableDatabase();
         Log.d(username,password);
-        Cursor result = myDb.rawQuery("select id,username,password from users where username=? and password=?",new String[]{username,password});//in java single quotes can take only once charater
+        Cursor result = myDb.rawQuery("select _id,username,password,room_ids from users where username=? and password=?",new String[]{username,password});//in java single quotes can take only once charater
         Log.d("result count: ", String.valueOf(result.getCount()));
         Log.d("column count: ", String.valueOf(result.getColumnCount()));
-        int tempId=-1;
+        int tempId = -1;
         String tempUsername="";
         String tempPassword="";
-
+        String tempRooms="";
         while (result.moveToNext()){
             tempId=result.getInt(0);
             tempUsername = result.getString(1);
             tempPassword = result.getString(2);
+            tempRooms = result.getString(3);
 //        Log.d("password: ", result.getString(1));
         }
         Log.d(String.valueOf(tempId),tempPassword);
@@ -164,9 +195,9 @@ public class DBHelper extends SQLiteOpenHelper{
 //            Log.d("username: ", result.getString(0));
 //            Log.d("password: ", result.getString(1));
             String[] answer=new String[]{String.valueOf(tempId),"true"};
-            return new String[]{String.valueOf(tempId),"true"};
+            return new String[]{"true",String.valueOf(tempId),tempUsername,tempPassword,tempRooms};
         }else
-            return new String[]{"0","false"};
+            return new String[]{"false",String.valueOf(tempId)};
 
     }
 }

@@ -5,9 +5,10 @@ package com.example.shant.roomspacesaver;
  */
 
 public class Furniture {
+    public int furnitureId;
     public String furnitureName;
-    public float furnitureLength;
-    public float furnitureWidth;
-    public float furnitureXPos;
-    public float furnitureYPos;
+    public String furnitureLength;
+    public String furnitureWidth;
+    public String furnitureXPos;
+    public String furnitureYPos;
 }

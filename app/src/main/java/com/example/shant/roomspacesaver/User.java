@@ -7,8 +7,9 @@ import java.util.Objects;
  */
 
 public class User {
+    public int userId;
     public String userName;
     public String password;
-    public Room[] rooms;
+    public String rooms;
 
 }
