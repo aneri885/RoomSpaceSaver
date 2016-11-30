@@ -77,6 +77,7 @@ public class DBHelper extends SQLiteOpenHelper{
     }
 
     public boolean addRoom(int userId, String roomName, String roomLength, String roomWidth, String furnitureIds){
+        Log.d("inside add room",String.valueOf(userId));
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(ROOM_NAME,roomName);
@@ -116,49 +117,6 @@ public class DBHelper extends SQLiteOpenHelper{
         return count;
     }
 
-//    public ArrayList getRoomsList(String userId){
-//        SQLiteDatabase myDb = this.getReadableDatabase();
-//        Cursor result = myDb.rawQuery("select room_ids from users where id=?",new String[]{userId});
-//        Log.d("result count: ", String.valueOf(result.getCount()));
-//        String roomList="";
-//        while (result.moveToNext()){
-//            Log.d("Room ids for list view:",result.getString(0));
-//            roomList = result.getString(0);
-//        }
-//        roomList = roomList.replaceAll("\\s+","");// remove all spaces from string (why are spaces being inserted?)
-//        String[] rooms=roomList.split(",");
-//        ArrayList<String> roomsList = new ArrayList<>(Arrays.asList(rooms));
-//        return roomsList;
-//    }
-
-//    public ArrayList<Room> getRooms(ArrayList<String> rooms){
-//        SQLiteDatabase myDb = this.getReadableDatabase();
-//        String temp = rooms.toString();
-//        temp = temp.substring(1,temp.length()-1);
-//        Log.d("getRooms",temp);
-//        Cursor result = myDb.rawQuery("select id,room_name,room_length,room_width,furniture_ids from rooms where id in ("+temp+")",new String[]{});
-////        Log.d("getRooms",temp.replaceAll("[0-9]+g","?"));
-//        //can also do temp.replaceAll("/[0-9]]","?") for multiple question marks, regex doesn't work
-//        Log.d("result count: ", String.valueOf(result.getCount()));
-//        Log.d("column count: ", String.valueOf(result.getColumnCount()));
-//        Room[] room=new Room[result.getCount()];
-//        ArrayList<Room> roomsData = new ArrayList<Room>();
-//        int i=0;
-//        while (result.moveToNext()){
-//            Log.d("id:",result.getString(0));
-//            Room roomData=new Room();
-//            roomData.roomName = result.getString(0);
-//            roomData.roomLength= result.getString(1);
-//            roomsData.add(i,roomData);
-//            Log.d("room_name:",result.getString(0));
-//            Log.d("room_length:",result.getString(1));
-//            Log.d("room_width:",result.getString(2));
-//            Log.d("furniture_ids:",result.getString(3));
-//            i++;
-//        }
-//        return roomsData;
-//    }
-
     public Cursor getRooms(ArrayList<String> rooms){
         SQLiteDatabase myDb = this.getReadableDatabase();
         Cursor result = myDb.rawQuery("select * from rooms where _id in ("+rooms.toString().replace("[","").replace("]","")+")",new String[]{});
@@ -170,6 +128,48 @@ public class DBHelper extends SQLiteOpenHelper{
         SQLiteDatabase myDb = this.getReadableDatabase();
         Cursor result = myDb.rawQuery("select * from rooms where _id=?",new String[]{String.valueOf(id)});
         return result;
+    }
+
+    public boolean addFurniture(int roomId, String furnitureLength, String furnitureWidth, String furnitureXpos, String furnitureYpos){
+        Log.d("inside addfurniture",String.valueOf(roomId));
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(FURNITURE_LENGTH,furnitureLength);
+        contentValues.put(FURNITURE_WIDTH,furnitureWidth);
+        contentValues.put(X_POSITION,furnitureXpos);
+        contentValues.put(Y_POSITION,furnitureYpos);
+        //id of inserted room is returned by db.insert
+        long furnitureNumber = db.insert(FURNITURES_TABLE,null,contentValues);
+        //need to add result to array of rooms of user
+        int result = addFurnitureToRoom(roomId,furnitureNumber);
+        Log.d("Furniture inserted: ",String.valueOf(furnitureNumber));
+        return furnitureNumber == -1 ? false : true;
+    }
+
+    public int addFurnitureToRoom(int roomId,long furnitureNumber){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor result = db.rawQuery("select furniture_ids from rooms where _id=?",new String[]{String.valueOf(roomId)});//in java single quotes can take only once charater
+        Log.d("result count: ", String.valueOf(result.getCount()));
+        Log.d("column count: ", String.valueOf(result.getColumnCount()));
+        String furniture_ids="";
+        while (result.moveToNext()){
+            Log.d("ids: ",result.getString(0));
+            furniture_ids = result.getString(0);
+        }
+        Log.d("Furniture ids: ",furniture_ids);
+        String[] furnitures = furniture_ids.split(",");
+        Log.d("Furniture ids: ",Arrays.toString(furnitures));
+        ArrayList<String> furnitureList = new ArrayList<>(Arrays.asList(furnitures));
+        furnitureList.add(furnitureList.size(),String.valueOf(furnitureNumber));
+        Log.d("Furniture ids: ",furnitureList.toString());
+        String test = furnitureList.toString();
+        Log.d("Furniture ids: ",test.substring(3,test.length()-1));
+        test = test.substring(3,test.length()-1);
+        ContentValues contentValues= new ContentValues();
+        contentValues.put(FURNITURE_IDS,test);
+        int count = db.update(ROOMS_TABLE,contentValues,ID+"=?",new String[]{String.valueOf(roomId)});
+        Log.d("count=",String.valueOf(count));
+        return count;
     }
 
     public String[] checkCredentials(String username,String password){
