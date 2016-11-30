@@ -62,7 +62,7 @@ public class RoomsActivity extends AppCompatActivity {
             Log.d(roomsData.getColumnName(1),roomsData.getString(1));
             Log.d(roomsData.getColumnName(2),roomsData.getString(2));
         }
-        RoomsListCursorAdapter roomsListCursorAdapter= new RoomsListCursorAdapter(this,roomsData,true);
+        RoomsListCursorAdapter roomsListCursorAdapter= new RoomsListCursorAdapter(this,roomsData,0);
         //roomsListCursorAdapter.notifyDataSetChanged();
 
 //        myDb.getRooms(roomsList);

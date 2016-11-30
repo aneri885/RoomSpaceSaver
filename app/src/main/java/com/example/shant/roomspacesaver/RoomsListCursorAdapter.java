@@ -13,10 +13,14 @@ import android.widget.TextView;
  */
 
 public class RoomsListCursorAdapter extends CursorAdapter {
-
-    public RoomsListCursorAdapter(Context context, Cursor c, boolean autoRequery) {
-        super(context, c, autoRequery);
+    public RoomsListCursorAdapter(Context context, Cursor c, int flags) {
+        super(context, c, flags);
     }
+
+
+//    public RoomsListCursorAdapter(Context context, Cursor c, boolean autoRequery) {
+//        super(context, c, autoRequery);
+//    }
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {

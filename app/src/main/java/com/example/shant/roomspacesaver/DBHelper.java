@@ -168,7 +168,7 @@ public class DBHelper extends SQLiteOpenHelper{
 
     public Cursor getRoomDetails(long id){
         SQLiteDatabase myDb = this.getReadableDatabase();
-        Cursor result = myDb.rawQuery("select * from rooms where _id in ?",new String[]{String.valueOf(id)});
+        Cursor result = myDb.rawQuery("select * from rooms where _id=?",new String[]{String.valueOf(id)});
         return result;
     }
 
