@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CursorAdapter;
@@ -61,6 +62,7 @@ public class RoomsActivity extends AppCompatActivity {
             Log.d(roomsData.getColumnName(2),roomsData.getString(2));
         }
         RoomsListCursorAdapter roomsListCursorAdapter= new RoomsListCursorAdapter(this,roomsData,true);
+        //roomsListCursorAdapter.notifyDataSetChanged();
 
 //        myDb.getRooms(roomsList);
 //        ArrayAdapter adapter=new ArrayAdapter(this,android.R.layout.simple_list_item_1,rooms);
@@ -78,6 +80,14 @@ public class RoomsActivity extends AppCompatActivity {
 //            }
 //        }
         roomsListView.setAdapter(roomsListCursorAdapter);// works with arrayList as well as array
+        roomsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Log.d("Room clicked",view.toString());
+//                Log.d("Room clicked",String.valueOf(position));
+                Log.d("Room _id clicked",String.valueOf(id));// id is _id so room details can be fetched form this.
+            }
+        });
 
     }
 
