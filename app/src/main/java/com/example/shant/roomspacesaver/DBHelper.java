@@ -166,6 +166,12 @@ public class DBHelper extends SQLiteOpenHelper{
 
     }
 
+    public Cursor getRoomDetails(long id){
+        SQLiteDatabase myDb = this.getReadableDatabase();
+        Cursor result = myDb.rawQuery("select * from rooms where _id in ?",new String[]{String.valueOf(id)});
+        return result;
+    }
+
     public String[] checkCredentials(String username,String password){
         Log.d("Inside ","checkCredentials");
         /*was getting an error: unable to open database file at line below, solution chmod 777 from terminal (data/data/appname/databases)

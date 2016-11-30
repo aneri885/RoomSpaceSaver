@@ -15,7 +15,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RoomsActivity"></activity>
+        <activity android:name=".RoomsActivity" />
+        <activity android:name=".EditRoomActivity"></activity>
     </application>
 
 </manifest>

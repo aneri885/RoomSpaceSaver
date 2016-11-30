@@ -3,6 +3,7 @@ package com.example.shant.roomspacesaver;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -86,6 +87,18 @@ public class RoomsActivity extends AppCompatActivity {
 //                Log.d("Room clicked",view.toString());
 //                Log.d("Room clicked",String.valueOf(position));
                 Log.d("Room _id clicked",String.valueOf(id));// id is _id so room details can be fetched form this.
+                Cursor roomDetails = myDb.getRoomDetails(id);
+                Intent intent = new Intent(RoomsActivity.this, EditRoomActivity.class);
+                Bundle b = new Bundle();
+                while (roomDetails.moveToNext()){
+                    b.putString("_id",roomDetails.getString(0));
+                    b.putString("room_name",roomDetails.getString(1));
+                    b.putString("room_length",roomDetails.getString(2));
+                    b.putString("room_width",roomDetails.getString(3));
+                    b.putString("furniture_ids",roomDetails.getString(4));
+                }
+                intent.putExtras(b);
+                startActivity(intent);
             }
         });
 
