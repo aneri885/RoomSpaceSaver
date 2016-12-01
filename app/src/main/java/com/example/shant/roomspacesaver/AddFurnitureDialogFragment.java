@@ -59,8 +59,8 @@ public class AddFurnitureDialogFragment extends DialogFragment {
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User cancelled the dialog
-                        RoomsActivity roomsActivity = (RoomsActivity) getActivity();
-                        roomsActivity.addRoomResult("Room creation cancelled");
+                        EditRoomActivity editRoomActivity = (EditRoomActivity) getActivity();
+                        editRoomActivity.addFurnitureResult("furniture creation cancelled");
 
                     }
                 });
