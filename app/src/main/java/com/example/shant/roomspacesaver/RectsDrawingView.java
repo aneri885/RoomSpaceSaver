@@ -94,7 +94,7 @@ public class RectsDrawingView extends View {
     public void onDraw(final Canvas canv) {
         // background bitmap to cover all area
         canv.drawBitmap(mBitmap, null, mMeasuredRect, null);
-
+        Log.d("On draw","called");
         for (RectArea rect : mRects) {
             canv.drawRect(rect.X - rect.length/2, rect.Y - rect.width/2, rect.X + rect.length/2, rect.Y + rect.width/2, mRectPaint);
         }

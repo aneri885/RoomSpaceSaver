@@ -123,7 +123,12 @@ public class DBHelper extends SQLiteOpenHelper{
         return result;
 
     }
+    public Cursor getFurnitures(ArrayList<String> furnitures){
+        SQLiteDatabase myDb = this.getReadableDatabase();
+        Cursor result = myDb.rawQuery("select * from furniture where _id in ("+furnitures.toString().replace("[","").replace("]","")+")",new String[]{});
+        return result;
 
+    }
     public Cursor getRoomDetails(long id){
         SQLiteDatabase myDb = this.getReadableDatabase();
         Cursor result = myDb.rawQuery("select * from rooms where _id=?",new String[]{String.valueOf(id)});

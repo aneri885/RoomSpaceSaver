@@ -1,6 +1,7 @@
 package com.example.shant.roomspacesaver;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -19,6 +20,8 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -33,6 +36,8 @@ public class EditRoomActivity extends AppCompatActivity {
     int roomId;
     float Length;
     float Width;
+    float XPos;
+    float YPos;
     RelativeLayout layout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +55,25 @@ public class EditRoomActivity extends AppCompatActivity {
         Log.d("Bundle - room length ", b.getString("room_length"));
         Log.d("Bundle - room width", b.getString("room_width"));
         Log.d("Bundle - furniture ids", b.getString("furniture_ids"));
+        final ArrayList<String> furnitureList = new ArrayList<>(Arrays.asList(b.getString("furniture_ids").replaceAll("\\s+","").split(",")));
+        Log.d("Furniture count",String.valueOf(furnitureList));
+        Log.d("Furniture",String.valueOf(furnitureList));
+        Cursor furnitureData = myDb.getFurnitures(furnitureList);
+        while (furnitureData.moveToNext()){
+            Log.d(furnitureData.getColumnName(0),furnitureData.getString(0));
+            Log.d(furnitureData.getColumnName(1),furnitureData.getString(1));
+            Log.d(furnitureData.getColumnName(2),furnitureData.getString(2));
+
+            Length = Float.parseFloat(furnitureData.getString(1));
+            Width = Float.parseFloat(furnitureData.getString(2));
+            XPos = Float.parseFloat(furnitureData.getString(3));
+            YPos = Float.parseFloat(furnitureData.getString(4));
+            RectsDrawingView.obtainTouchedRect(XPos, YPos, Length, Width);
+
+        }
+        HashSet<RectArea> mRects = RectsDrawingView.mRects;
+        Log.d("on create","edit room ectivity");
+
     }
 
     public void addFurniture(View view) {
@@ -76,8 +100,8 @@ public class EditRoomActivity extends AppCompatActivity {
         Log.d("New furniture width:  ", furnitureWidth);
         Length = Float.parseFloat(furnitureLength);
         Width = Float.parseFloat(furnitureWidth);
-        RectArea rect;
-        rect = new RectArea(150,150,Length,Width);
+//        RectArea rect;
+//        rect = new RectArea(150,150,Length,Width);
         RectsDrawingView.obtainTouchedRect(50,50,Length,Width);
         return myDb.addFurniture(roomId, furnitureLength, furnitureWidth, "0", "0");//add furniture at origin
     }
