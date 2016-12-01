@@ -128,8 +128,10 @@ public class RoomsActivity extends AppCompatActivity {
         return myDb.addRoom(userId,roomName, roomLength, roomWidth, "");
     }
 
+
     public void addRoomResult(String toastMsg){
         Toast.makeText(RoomsActivity.this, toastMsg, Toast.LENGTH_SHORT).show();
     }
+
 }
 

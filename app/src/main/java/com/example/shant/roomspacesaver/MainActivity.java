@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 //                Log.d(username,password);
 //                String[] result = myDb.checkCredentials(username, password);
 //                if (result[1]=="true"){
-//                    Toast.makeText(MainActivity.this, "Success !", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity.this, "Succesalices !", Toast.LENGTH_SHORT).show();
 //                    Intent intent = new Intent(MainActivity.this, RoomsActivity.class);
 //                    Bundle b = new Bundle();
 //                    b.putString("userId",result[0]);
