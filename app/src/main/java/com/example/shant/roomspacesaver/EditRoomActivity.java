@@ -16,12 +16,13 @@ import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.util.HashSet;
 import java.util.Random;
+
+import static java.lang.Boolean.TRUE;
 
 public class EditRoomActivity extends AppCompatActivity {
 
@@ -76,9 +77,14 @@ public class EditRoomActivity extends AppCompatActivity {
         Length = Float.parseFloat(furnitureLength);
         Width = Float.parseFloat(furnitureWidth);
         RectArea rect;
-        rect = new RectArea(50,50,Length,Width);
+        rect = new RectArea(150,150,Length,Width);
         RectsDrawingView.obtainTouchedRect(50,50,Length,Width);
         return myDb.addFurniture(roomId, furnitureLength, furnitureWidth, "0", "0");//add furniture at origin
+    }
+
+
+    public void furnitureRead(){
+
     }
 
 
@@ -111,7 +117,13 @@ public class EditRoomActivity extends AppCompatActivity {
 
         /** All available circles */
         public  static HashSet<RectArea> mRects = new HashSet<RectArea>(RECTS_LIMIT);
-        private SparseArray<RectArea> mCirclePointer = new SparseArray<RectArea>(RECTS_LIMIT);
+        private SparseArray<RectArea> mPointer = new SparseArray<RectArea>(RECTS_LIMIT);
+
+        public float mTouchx;
+        public float mTouchy;
+
+
+
 
         /**
          * Default constructor
@@ -172,7 +184,7 @@ public class EditRoomActivity extends AppCompatActivity {
             switch (event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
                     // it's the first pointer, so clear all existing pointers data
-                    clearCirclePointer();
+                    clearPointer();
 
                     xTouch = (int) event.getX(0);
                     yTouch = (int) event.getY(0);
@@ -183,7 +195,9 @@ public class EditRoomActivity extends AppCompatActivity {
                         break;
                     touchedRect.X = xTouch;
                     touchedRect.Y = yTouch;
-                    mCirclePointer.put(event.getPointerId(0), touchedRect);
+                    mTouchx = xTouch;
+                    mTouchy = yTouch;
+                    mPointer.put(event.getPointerId(0), touchedRect);
 
                     invalidate();
                     handled = true;
@@ -201,7 +215,8 @@ public class EditRoomActivity extends AppCompatActivity {
                     touchedRect = getTouchedRect(xTouch, yTouch);
                     if(touchedRect == null)
                         break;
-                    mCirclePointer.put(pointerId, touchedRect);
+                    mPointer.put(pointerId, touchedRect);
+
                     touchedRect.X = xTouch;
                     touchedRect.Y = yTouch;
                     invalidate();
@@ -222,7 +237,7 @@ public class EditRoomActivity extends AppCompatActivity {
 
 
 
-                        touchedRect = mCirclePointer.get(pointerId);
+                        touchedRect = mPointer.get(pointerId);
 
                         if (null != touchedRect) {
 
@@ -234,8 +249,13 @@ public class EditRoomActivity extends AppCompatActivity {
                                 xTouch=80+(int)touchedRect.length/2;
                                 yTouch= 80+(int)touchedRect.width/2;
                         }
+                            if(!avoidOverlap(touchedRect)){
+                                touchedRect.X = xTouch;
+                                touchedRect.Y = yTouch;
+                            }
                             touchedRect.X = xTouch;
                             touchedRect.Y = yTouch;
+
 
                         }
                     }
@@ -244,7 +264,15 @@ public class EditRoomActivity extends AppCompatActivity {
                     break;
 
                 case MotionEvent.ACTION_UP:
-                    clearCirclePointer();
+                    xTouch = (int) event.getX(actionIndex);
+                    yTouch = (int) event.getY(actionIndex);
+                    touchedRect = getTouchedRect(xTouch, yTouch);
+                    if(!avoidOverlap(touchedRect)){
+                        touchedRect.X = mTouchx;
+                        touchedRect.Y = mTouchy;
+                    }
+
+                    clearPointer();
                     invalidate();
                     handled = true;
                     break;
@@ -253,7 +281,7 @@ public class EditRoomActivity extends AppCompatActivity {
                     // not general pointer was up
                     pointerId = event.getPointerId(actionIndex);
 
-                    mCirclePointer.remove(pointerId);
+                    mPointer.remove(pointerId);
                     invalidate();
                     handled = true;
                     break;
@@ -273,10 +301,10 @@ public class EditRoomActivity extends AppCompatActivity {
         /**
          * Clears all CircleArea - pointer id relations
          */
-        public void clearCirclePointer() {
+        public void clearPointer() {
             Log.w(TAG, "clearCirclePointer");
 
-            mCirclePointer.clear();
+            mPointer.clear();
         }
 
         /**
@@ -323,16 +351,45 @@ public class EditRoomActivity extends AppCompatActivity {
                 return null;
             return touched;
         }
-        /*avoid overlap the furnture
-        public Boolean avoidOverlap(final float xTouch, final float yTouch){
+        /*avoid overlap the furnture*/
+        public Boolean avoidOverlap(RectArea touched){
+
+            point leftTop = new point(touched.X - touched.length/2,touched.Y-touched.width/2);
+            point leftBottom= new point(touched.X - touched.length/2,touched.Y+touched.width/2);
+            point rightTop= new point(touched.X + touched.length/2,touched.Y-touched.width/2);
+            point rightBottom= new point(touched.X + touched.length/2,touched.Y-touched.width/2);
+
             for (RectArea rect : mRects) {
-                if ((xTouch >= rect.X-rect.length  && xTouch <= rect.X + rect.length && yTouch  >= rect.Y -rect.width && yTouch <= rect.Y + rect.width)) {
-                    Log.i("Touched","");
-                    touched = rect;
-                    break;
+                if (touched == rect) {continue;
                 }
+                if(leftTop.X >= rect.X-rect.length/2  && leftTop.X <= rect.X + rect.length/2 && leftTop.Y  >= rect.Y -rect.width/2 && leftTop.Y <= rect.Y + rect.width/2) {
+                    Log.w(TAG, "Overlap");
+                    return false;
+                }
+                if(leftBottom.X >= rect.X-rect.length/2  && leftBottom.X <= rect.X + rect.length/2 && leftBottom.Y  >= rect.Y -rect.width/2 && leftBottom.Y <= rect.Y + rect.width/2) {
+                    Log.w(TAG, "Overlap");
+                    return false;
+                }
+                if(rightTop.X >= rect.X-rect.length/2  && rightTop.X <= rect.X + rect.length/2 && rightTop.Y  >= rect.Y -rect.width/2 && rightTop.Y <= rect.Y + rect.width/2) {
+                    Log.w(TAG, "Overlap");
+                    return false;
+                }
+                if(rightBottom.X >= rect.X-rect.length/2  && rightBottom.X <= rect.X + rect.length/2 && rightBottom.Y  >= rect.Y -rect.width/2 && rightBottom.Y <= rect.Y + rect.width/2) {
+                    Log.w(TAG, "Overlap");;
+                    return false;
+                }
+
             }
-        }*/
+            return TRUE;
+        }
+        public class point{
+            float X;
+            float Y;
+            point(float X, float Y) {
+                this.X = X;
+                this.Y = Y;
+            }
+        }
 
         @Override
         protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
