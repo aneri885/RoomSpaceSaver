@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 
+import static com.example.shant.roomspacesaver.RectsDrawingView.mRects;
 import static java.lang.Boolean.TRUE;
 
 public class EditRoomActivity extends AppCompatActivity {
@@ -59,6 +60,7 @@ public class EditRoomActivity extends AppCompatActivity {
         Log.d("Furniture count",String.valueOf(furnitureList));
         Log.d("Furniture",String.valueOf(furnitureList));
         Cursor furnitureData = myDb.getFurnitures(furnitureList);
+        mRects.clear();
         while (furnitureData.moveToNext()){
             Log.d(furnitureData.getColumnName(0),furnitureData.getString(0));
             Log.d(furnitureData.getColumnName(1),furnitureData.getString(1));
@@ -77,7 +79,7 @@ public class EditRoomActivity extends AppCompatActivity {
     }
 
     public void saveRoomLayout(){
-        HashSet<RectArea> mRects = RectsDrawingView.mRects;
+
 
 
     }
@@ -111,10 +113,6 @@ public class EditRoomActivity extends AppCompatActivity {
         return myDb.addFurniture(roomId, furnitureLength, furnitureWidth, "50", "50");//add furniture at origin
     }
 
-
-    public void furnitureRead(){
-
-    }
 
 
     public void addFurnitureResult(String toastMsg) {
