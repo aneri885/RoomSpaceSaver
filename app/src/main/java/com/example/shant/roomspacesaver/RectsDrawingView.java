@@ -245,11 +245,11 @@ public class RectsDrawingView extends View {
      *
      * @return obtained {@link RectArea}
      */
-    public static RectArea obtainTouchedRect(final float xTouch, final float yTouch,float length, float width) {
+    public static RectArea obtainTouchedRect(int id,final float xTouch, final float yTouch,float length, float width) {
         RectArea touchedRect = getTouchedRect(xTouch, yTouch);
 
 
-        touchedRect = new RectArea(xTouch-length/2, yTouch-width/2, xTouch + length/2, yTouch + width/2);
+        touchedRect = new RectArea(id,xTouch-length/2, yTouch-width/2, xTouch + length/2, yTouch + width/2);
 
 
         Log.w(TAG, "Added rect " + touchedRect);

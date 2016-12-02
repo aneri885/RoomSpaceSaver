@@ -34,6 +34,7 @@ public class RoomsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Bundle b = getIntent().getExtras();
         //storing userid for further use in room manipulation
+        Log.d("on create:",b.getString("userId"));
         userId = Integer.parseInt(b.getString("userId"));
         Log.d("Bundle - id ",b.getString("userId"));
         Log.d("Bundle - username ",b.getString("username"));
@@ -81,6 +82,7 @@ public class RoomsActivity extends AppCompatActivity {
 //            }
 //        }
         roomsListView.setAdapter(roomsListCursorAdapter);// works with arrayList as well as array
+
         roomsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -125,6 +127,8 @@ public class RoomsActivity extends AppCompatActivity {
         Log.d("New room name:  ",roomName);
         Log.d("New room length:  ",roomLength);
         Log.d("New room width:  ",roomWidth);
+        Log.d("User id:  ",String.valueOf(userId));
+
         return myDb.addRoom(userId,roomName, roomLength, roomWidth, "");
     }
 

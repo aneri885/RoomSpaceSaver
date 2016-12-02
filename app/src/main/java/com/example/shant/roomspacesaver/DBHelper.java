@@ -191,6 +191,7 @@ public class DBHelper extends SQLiteOpenHelper{
         String tempPassword="";
         String tempRooms="";
         while (result.moveToNext()){
+            tempId = Integer.parseInt(result.getString(0));
             tempUsername = result.getString(1);
             tempPassword = result.getString(2);
             tempRooms = result.getString(3);

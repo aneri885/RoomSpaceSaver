@@ -63,19 +63,24 @@ public class EditRoomActivity extends AppCompatActivity {
             Log.d(furnitureData.getColumnName(0),furnitureData.getString(0));
             Log.d(furnitureData.getColumnName(1),furnitureData.getString(1));
             Log.d(furnitureData.getColumnName(2),furnitureData.getString(2));
-
+            int furnitureId = Integer.parseInt(furnitureData.getString(0));
             Length = Float.parseFloat(furnitureData.getString(1));
             Width = Float.parseFloat(furnitureData.getString(2));
             XPos = Float.parseFloat(furnitureData.getString(3));
             YPos = Float.parseFloat(furnitureData.getString(4));
-            RectsDrawingView.obtainTouchedRect(XPos, YPos, Length, Width);
+            RectsDrawingView.obtainTouchedRect(furnitureId,XPos, YPos, Length, Width);
 
         }
-        HashSet<RectArea> mRects = RectsDrawingView.mRects;
+//        HashSet<RectArea> mRects = RectsDrawingView.mRects;
         Log.d("on create","edit room ectivity");
 
     }
 
+    public void saveRoomLayout(){
+        HashSet<RectArea> mRects = RectsDrawingView.mRects;
+
+
+    }
     public void addFurniture(View view) {
         addFurnitureButton = (Button) findViewById(R.id.addFurnitureButton);
 //        addRoomButton.setOnClickListener(new View.OnClickListener() {
@@ -102,8 +107,8 @@ public class EditRoomActivity extends AppCompatActivity {
         Width = Float.parseFloat(furnitureWidth);
 //        RectArea rect;
 //        rect = new RectArea(150,150,Length,Width);
-        RectsDrawingView.obtainTouchedRect(50,50,Length,Width);
-        return myDb.addFurniture(roomId, furnitureLength, furnitureWidth, "0", "0");//add furniture at origin
+        RectsDrawingView.obtainTouchedRect(0,50,50,Length,Width);
+        return myDb.addFurniture(roomId, furnitureLength, furnitureWidth, "50", "50");//add furniture at origin
     }
 
 
